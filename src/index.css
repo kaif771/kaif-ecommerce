@@ -7,3 +7,77 @@
 body {
   font-family: 'Inter', sans-serif;
 }
+
+/* Smooth animations */
+@keyframes slide-in-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: slide-in-from-top 0.2s ease-out;
+}
+
+/* Professional touch targets for mobile */
+@media (max-width: 640px) {
+  header button,
+  header a[aria-label] {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Extra small devices (under 300px) - Professional adjustments */
+@media (max-width: 300px) {
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  /* Logo stays readable */
+  header img[alt="kaif.store"] {
+    max-width: 90px;
+    height: auto;
+  }
+  
+  /* Maintain good icon sizes */
+  header button img,
+  header a[aria-label] img {
+    width: 18px;
+    height: 18px;
+  }
+  
+  /* Professional spacing */
+  header .flex {
+    gap: 0.5rem;
+  }
+  
+  /* Readable cart badge */
+  header .absolute {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    line-height: 1;
+  }
+  
+  /* Professional search input */
+  input[type="text"] {
+    font-size: 14px;
+    padding: 0.5rem;
+  }
+  
+  /* Professional mobile menu */
+  nav a {
+    font-size: 15px;
+    padding: 0.75rem 1rem;
+  }
+}
