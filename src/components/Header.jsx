@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { assets } from '../assets/assets'
 import { useStore } from '../context/StoreContext'
+import { useUser, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const { getCartCount } = useStore()
+  const { user, isLoaded } = useUser()
 
   return (
     <header className="bg-white border-b border-black sticky top-0 z-50 shadow-lg">
@@ -58,25 +60,43 @@ const Header = () => {
                 setSearchOpen(!searchOpen)
                 if (!searchOpen) setMenuOpen(false)
               }}
-              className="p-2 sm:p-2.5 rounded-lg transition-all border border-black hover:bg-black hover:text-white active:scale-95"
+              className="p-2 sm:p-2.5 rounded-lg transition-all border border-black cursor-pointer hover:bg-gray-400 hover:text-white active:scale-95"
               aria-label="Search"
             >
               <img src={assets.search_icon} alt="Search" className="w-5 h-5 sm:w-5 md:w-6" />
             </button>
 
-            {/* Profile */}
-            <Link 
-              to="/login" 
-              className="p-2 sm:p-2.5 rounded-lg transition-all border border-black hover:bg-black hover:text-white active:scale-95" 
-              aria-label="Profile"
-            >
-              <img src={assets.profile_icon} alt="Profile" className="w-5 h-5 sm:w-5 md:w-6" />
-            </Link>
+            {/* Profile - Show UserButton when signed in */}
+            <SignedIn>
+              {isLoaded && (
+                <div className="p-1 sm:p-1.5 rounded-lg border border-black hover:bg-gray-100 transition-all">
+                  <UserButton 
+                    afterSignOutUrl="/"
+                    appearance={{
+                      elements: {
+                        avatarBox: "w-6 h-6 sm:w-6 sm:h-6 md:w-8 md:h-8"
+                      }
+                    }}
+                  />
+                </div>
+              )}
+            </SignedIn>
+
+            {/* Profile - Show icon button when signed out */}
+            <SignedOut>
+              <Link 
+                to="/login" 
+                className="p-2 sm:p-2.5 rounded-lg transition-all border border-black hover:bg-black hover:text-white active:scale-95" 
+                aria-label="Profile"
+              >
+                <img src={assets.profile_icon} alt="Profile" className="w-5 h-5 sm:w-5 md:w-6" />
+              </Link>
+            </SignedOut>
 
             {/* Cart */}
             <Link 
               to="/cart" 
-              className="relative p-2 sm:p-2.5 rounded-lg transition-all border border-black hover:bg-black hover:text-white active:scale-95" 
+              className="relative p-2 sm:p-2.5 rounded-lg transition-all border border-black hover:bg-gray-400 hover:text-white active:scale-95" 
               aria-label="Cart"
             >
               <img src={assets.cart_icon} alt="Cart" className="w-5 h-5 sm:w-5 md:w-6" />
@@ -155,6 +175,29 @@ const Header = () => {
               >
                 Contact
               </Link>
+
+              <SignedIn>
+                {isLoaded && user && (
+                  <div className="px-4 py-3 border-l-4 border-black bg-gray-50 mb-2">
+                    <p className="text-xs font-medium text-gray-600">Signed in as</p>
+                    <p className="text-sm font-bold text-black truncate">
+                      {user.firstName && user.lastName 
+                        ? `${user.firstName} ${user.lastName}` 
+                        : user.emailAddresses[0]?.emailAddress || 'User'}
+                    </p>
+                  </div>
+                )}
+              </SignedIn>
+
+              <SignedOut>
+                <Link
+                  to="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="text-black hover:text-gray-600 font-medium transition-all border-l-4 border-transparent hover:border-black hover:bg-gray-50 text-base sm:text-lg py-3 px-4 rounded-r-lg"
+                >
+                  Login
+                </Link>
+              </SignedOut>
             </nav>
           </div>
         )}

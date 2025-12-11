@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { SignIn, useAuth } from '@clerk/clerk-react'
+import { SignUp, useAuth , } from '@clerk/clerk-react'
 
-const Login = () => {
+const Signup = () => {
   const { isSignedIn } = useAuth()
   const navigate = useNavigate()
 
@@ -22,9 +22,9 @@ const Login = () => {
         </div>
         
         <div className="bg-white p-8 rounded-lg shadow-md">
-          <SignIn 
+          <SignUp 
             routing="hash"
-            signUpUrl="/signup"
+            signInUrl="/login"
             fallbackRedirectUrl="/"
             forceRedirectUrl="/"
             appearance={{
@@ -40,4 +40,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Signup
